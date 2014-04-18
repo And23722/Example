@@ -9,9 +9,11 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 import android.os.Build;
 
 public class MainActivity extends ActionBarActivity {
@@ -49,11 +51,11 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
     
-    public void send(View view) {
+    //public void send(View view) {
     	
-    	Log.d("debug", "click");
+    //	Log.d("debug", "click");
     	
-    }
+    //}
 
     /**
      * A placeholder fragment containing a simple view.
@@ -75,6 +77,18 @@ public class MainActivity extends ActionBarActivity {
             editText = (EditText) rootView.findViewById(R.id.editText1);
             
             button.setText("Send");
+
+            button.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View arg0) {
+					// TODO Auto-generated method stub
+					String text = editText.getText().toString();
+					Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
+					editText.setText("");
+				}
+            	
+            });
             
             return rootView;
         }
