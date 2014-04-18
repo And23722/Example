@@ -5,11 +5,13 @@ import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
@@ -67,6 +69,12 @@ public class MainActivity extends ActionBarActivity {
 
         public PlaceholderFragment() {
         }
+        
+        private void send(){
+        	String text = editText.getText().toString();
+        	Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
+        	editText.setText("");
+        }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -76,16 +84,33 @@ public class MainActivity extends ActionBarActivity {
             button = (Button) rootView.findViewById(R.id.button1);
             editText = (EditText) rootView.findViewById(R.id.editText1);
             
+            editText.setOnKeyListener(new OnKeyListener() {
+
+				@Override
+				public boolean onKey(View v, int keyCode, KeyEvent event){
+					
+					if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER){
+						
+						send();
+						return true;
+												
+					}
+					
+					
+					return false;
+					// TODO Auto-generated method stub
+					
+				}			
+				
+			});
             button.setText("Send");
 
             button.setOnClickListener(new OnClickListener() {
 
 				@Override
-				public void onClick(View arg0) {
+				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					String text = editText.getText().toString();
-					Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
-					editText.setText("");
+					send();
 				}
             	
             });
