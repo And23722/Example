@@ -4,11 +4,14 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.os.Build;
 
 public class MainActivity extends ActionBarActivity {
@@ -45,11 +48,20 @@ public class MainActivity extends ActionBarActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+    
+    public void send(View view) {
+    	
+    	Log.d("debug", "click");
+    	
+    }
 
     /**
      * A placeholder fragment containing a simple view.
      */
     public static class PlaceholderFragment extends Fragment {
+    	
+    	private Button button;
+    	private EditText editText;
 
         public PlaceholderFragment() {
         }
@@ -58,6 +70,12 @@ public class MainActivity extends ActionBarActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+            
+            button = (Button) rootView.findViewById(R.id.button1);
+            editText = (EditText) rootView.findViewById(R.id.editText1);
+            
+            button.setText("Send");
+            
             return rootView;
         }
     }
