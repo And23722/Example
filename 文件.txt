@@ -1,0 +1,10 @@
+課程相關的 github 連結
+http://github.com/godgunman/android_class2
+
+Example資料夾裡的
+
+SimpleLinearLayout資料夾
+
+SimpleLinearLayout 此Project用layout畫面製作完成
+
+SimpleLinearLayout2 此Project用程式碼編譯完成
