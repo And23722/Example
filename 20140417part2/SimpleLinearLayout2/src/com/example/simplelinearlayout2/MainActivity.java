@@ -9,6 +9,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.os.Build;
 
 public class MainActivity extends ActionBarActivity {
@@ -57,8 +60,28 @@ public class MainActivity extends ActionBarActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
+//            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        	
+        	LinearLayout ll = new LinearLayout(getActivity());
+        	ll.setOrientation(LinearLayout.VERTICAL);
+        	
+        	EditText toEditText = new EditText(getActivity());
+        	toEditText.setHint("To");
+        	
+        	EditText subjectEditText = new EditText(getActivity());
+        	subjectEditText.setHint("Subject");
+        	
+        	EditText messageEditText = new EditText(getActivity());
+        	messageEditText.setHint("Message");
+        	
+        	ll.addView(toEditText);
+        	ll.addView(subjectEditText);
+        	ll.addView(messageEditText);
+        	
+        	LinearLayout.LayoutParams params = (LayoutParams) messageEditText.getLayoutParams();
+        	params.weight = 1;
+        	
+        	return ll;
         }
     }
 
