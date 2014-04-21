@@ -8,3 +8,12 @@ SimpleLinearLayout資料夾
 SimpleLinearLayout 此Project用layout畫面製作完成
 
 SimpleLinearLayout2 此Project用程式碼編譯完成
+
+2014/04/21
+
+SimpleUI
+
+https://github.com/godgunman/android_class2/blob/master/20140421/SimpleUI/src/com/example/simpleui/MainActivity.java
+
+DDMS -> File Explorer
+/data/data/com.example.simpleui/shared_prefs/settings.xml
