@@ -9,6 +9,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.os.Build;
@@ -55,6 +57,7 @@ public class MainActivity extends ActionBarActivity {
     	
     	private Spinner month;
     	private Spinner date;
+    	private final static int[] LIMITS = new int[] { 31, 28, 31, 30, 31, 30 };
 
         public PlaceholderFragment() {
         }
@@ -72,19 +75,38 @@ public class MainActivity extends ActionBarActivity {
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, list );
             
             month.setAdapter(adapter);
+            month.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+				@Override
+				public void onItemSelected(AdapterView<?> adpaterView, View view,
+						int position, long id) {
+					// TODO Auto-generated method stub
+					setDateSpinner(LIMITS[position]);
+				}
+
+				@Override
+				public void onNothingSelected(AdapterView<?> arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				
+			});
             
-            String[] list2 = new String[31];
+            return rootView;
+        }
+
+		private void setDateSpinner(int limit) {
+			String[] list2 = new String[limit];
             
-			for (int i = 0; i < 31; i++) {
+			for (int i = 0; i < limit; i++) {
 				list2[i] = String.valueOf(i + 1);
 			}
 
             ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, list2 );
             
             date.setAdapter(adapter2);
-
-            return rootView;
-        }
+		}
     }
 
 }
