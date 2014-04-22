@@ -17,6 +17,8 @@ import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.os.Build;
@@ -96,6 +98,17 @@ public class MainActivity extends ActionBarActivity {
 			button = (Button) rootView.findViewById(R.id.button1);
 			editText = (EditText) rootView.findViewById(R.id.editText1);
 			checkBox = (CheckBox) rootView.findViewById(R.id.checkBox1);
+			
+			checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener(){
+
+				@Override
+				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+					editor.putBoolean("checkBox", isChecked);
+					editor.commit();
+					
+				}
+				
+			});
 
 			editText.setOnKeyListener(new OnKeyListener() {
 
@@ -130,6 +143,9 @@ public class MainActivity extends ActionBarActivity {
 				}
 
 			});
+			
+			editText.setText(sp.getString("text",""));
+			checkBox.setChecked(sp.getBoolean("checkBox",false));
 
 			return rootView;
 		}
