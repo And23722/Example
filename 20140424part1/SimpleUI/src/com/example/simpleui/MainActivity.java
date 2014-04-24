@@ -4,6 +4,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -83,6 +84,11 @@ public class MainActivity extends ActionBarActivity {
 			}
 			Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
 			editText.setText("");
+			
+			Intent intent = new Intent();
+			intent.setClass(getActivity(), MessageActivity.class);
+			intent.putExtra("text", text);
+			getActivity().startActivity(intent);
 		}
 
 		@Override
