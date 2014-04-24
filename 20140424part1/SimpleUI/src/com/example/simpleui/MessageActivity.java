@@ -55,7 +55,7 @@ public class MessageActivity extends Activity {
 	private void writeFile2(String text) {
 
 		File docDir = Environment
-				.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
+				.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
 
 		if (docDir.exists() == false) {
 			docDir.mkdirs();
