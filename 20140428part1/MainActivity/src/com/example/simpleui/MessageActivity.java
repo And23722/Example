@@ -2,7 +2,10 @@ package com.example.simpleui;
 
 
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -16,16 +19,17 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 @SuppressLint("NewApi")
 public class MessageActivity extends Activity {
 
-	private TextView textView;
-	private ProgressBar progressBar;
 	private ProgressDialog progressDialog;
+	private ListView listView;
 	
 
 	@Override
@@ -35,8 +39,7 @@ public class MessageActivity extends Activity {
 
 		setContentView(R.layout.activity_message);
 		boolean isChecked = getIntent().getBooleanExtra("checkBox", false); 
-		textView = (TextView) findViewById(R.id.textView1);
-		progressBar = (ProgressBar)findViewById(R.id.progressBar1);
+		listView = (ListView) findViewById(R.id.listView1);
 		progressDialog = new ProgressDialog(this);
 		progressDialog.setTitle("SimpeUI");
 		progressDialog.setMessage("Loading...");
@@ -54,12 +57,21 @@ public class MessageActivity extends Activity {
 		query.findInBackground(new FindCallback<ParseObject>() {
 			public void done(List<ParseObject> messages, ParseException e) {
 				if (e == null) {
-					String content = "";
+					
+					List<Map<String , Object>> data = new ArrayList<Map<String , Object>>();
+					String[] from = new String[] {"text","checkBox"};
+					int[] to = new int[]{android.R.id.text1,android.R.id.text2};			
+					
 					for (ParseObject message : messages) {
-						content += message.getString("text") + "\n";
+						Map<String, Object>item = new HashMap<String, Object>();
+						item.put("text", message.getString("text"));
+						item.put("checkBox", message.getBoolean("checkBox"));
+						data.add(item);
 					}
-					textView.setText(content);
-					progressBar.setVisibility(View.GONE);
+					
+					SimpleAdapter adapter = new SimpleAdapter(MessageActivity.this, data, android.R.layout.simple_list_item_2, from, to);
+					listView.setAdapter(adapter);
+					
 					progressDialog.dismiss();
 				} else {
 					e.printStackTrace();
