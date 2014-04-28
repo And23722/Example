@@ -14,6 +14,8 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +23,7 @@ import android.widget.Toast;
 public class MessageActivity extends Activity {
 
 	private TextView textView;
+	private ProgressBar progressBar;
 	
 
 	@Override
@@ -31,10 +34,11 @@ public class MessageActivity extends Activity {
 		setContentView(R.layout.activity_message);
 		boolean isChecked = getIntent().getBooleanExtra("checkBox", false); 
 		textView = (TextView) findViewById(R.id.textView1);
+		progressBar = (ProgressBar)findViewById(R.id.progressBar1);
 		String text = getIntent().getStringExtra("text");
 		
 		saveData(text, isChecked);
-		loadData();
+
 	}
 	
 	private void loadData() {
@@ -47,6 +51,7 @@ public class MessageActivity extends Activity {
 						content += message.getString("text") + "\n";
 					}
 					textView.setText(content);
+					progressBar.setVisibility(View.GONE);
 				} else {
 					e.printStackTrace();
 				}
@@ -67,6 +72,7 @@ public class MessageActivity extends Activity {
 						e.printStackTrace();
 					}
 					ok();
+					loadData();
 				}
 			});
 		}
