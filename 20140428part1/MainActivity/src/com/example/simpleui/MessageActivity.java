@@ -12,6 +12,7 @@ import com.parse.SaveCallback;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -24,6 +25,7 @@ public class MessageActivity extends Activity {
 
 	private TextView textView;
 	private ProgressBar progressBar;
+	private ProgressDialog progressDialog;
 	
 
 	@Override
@@ -35,6 +37,12 @@ public class MessageActivity extends Activity {
 		boolean isChecked = getIntent().getBooleanExtra("checkBox", false); 
 		textView = (TextView) findViewById(R.id.textView1);
 		progressBar = (ProgressBar)findViewById(R.id.progressBar1);
+		progressDialog = new ProgressDialog(this);
+		progressDialog.setTitle("SimpeUI");
+		progressDialog.setMessage("Loading...");
+		progressDialog.setCancelable(false);
+		progressDialog.show();
+		
 		String text = getIntent().getStringExtra("text");
 		
 		saveData(text, isChecked);
@@ -52,6 +60,7 @@ public class MessageActivity extends Activity {
 					}
 					textView.setText(content);
 					progressBar.setVisibility(View.GONE);
+					progressDialog.dismiss();
 				} else {
 					e.printStackTrace();
 				}
