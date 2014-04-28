@@ -23,6 +23,8 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.os.Build;
+import com.parse.Parse;
+import com.parse.ParseAnalytics;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -35,6 +37,8 @@ public class MainActivity extends ActionBarActivity {
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
+		
+		Parse.initialize(this, "O4iEXuBYuEGTpTMme9gAWp03emNBx2OUplTYH35p", "cIE0N6i9QbSp5Pb63U6aDnOWp0zAozR6rNz9Omvu");
 	}
 
 	@Override
