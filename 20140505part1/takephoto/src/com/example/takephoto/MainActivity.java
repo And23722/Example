@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -31,6 +32,7 @@ public class MainActivity extends ActionBarActivity {
 
 	private ImageView imageView;
 	private TextView textView;
+	private Uri outputFileUri;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +60,10 @@ public class MainActivity extends ActionBarActivity {
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_photo) {
+			outputFileUri = Uri.fromFile(getTargetFile());
 			Intent intent = new Intent();
 			intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+			intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
 			startActivityForResult(intent, REQUEST_CODE_PHOTO);
 			return true;
 		}
@@ -76,9 +80,10 @@ public class MainActivity extends ActionBarActivity {
 		if (requestCode == REQUEST_CODE_PHOTO) {
 
 			if (resultCode == RESULT_OK) {
-				Bitmap bitmap = intent.getParcelableExtra("data");
-				imageView.setImageBitmap(bitmap);
-				save(bitmap);
+				// Bitmap bitmap = intent.getParcelableExtra("data");
+				// imageView.setImageBitmap(bitmap);
+				// save(bitmap);
+				textView.setText(outputFileUri.getPath());
 				Log.d("debug", "OK");
 
 			} else if (resultCode == RESULT_CANCELED) {
@@ -91,14 +96,19 @@ public class MainActivity extends ActionBarActivity {
 		}
 	}
 
-	private void save(Bitmap bitmap) {
-		// TODO Auto-generated method stub
+	private File getTargetFile() {
 		File imageDir = Environment
 				.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 		if (imageDir.exists() == false) {
 			imageDir.mkdir();
 		}
-		File imageFile = new File(imageDir, "photo.png");
+		return new File(imageDir, "photo.png");
+	}
+
+	private void save(Bitmap bitmap) {
+		// TODO Auto-generated method stub
+
+		File imageFile = getTargetFile();
 		try {
 			FileOutputStream fos = new FileOutputStream(imageFile);
 			bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
@@ -109,7 +119,7 @@ public class MainActivity extends ActionBarActivity {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		textView.setText(imageFile.getPath());
 
 	}
