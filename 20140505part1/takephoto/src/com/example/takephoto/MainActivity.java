@@ -1,6 +1,7 @@
 package com.example.takephoto;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -25,6 +26,12 @@ import android.widget.TextView;
 import android.os.Build;
 import android.provider.MediaStore;
 
+import com.parse.Parse;
+import com.parse.ParseAnalytics;
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.SaveCallback;
+
 @SuppressLint("ValidFragment")
 public class MainActivity extends ActionBarActivity {
 
@@ -43,6 +50,9 @@ public class MainActivity extends ActionBarActivity {
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
+
+		Parse.initialize(this, "7nPKBJx6Q0HYZ0LImZUjOKGG6U2d0novRlZKIsXZ",
+				"GxZNZx4F1YPpBq0FzSJHSRqx6A17nu4T47ygwI3e");
 	}
 
 	@Override
@@ -83,7 +93,9 @@ public class MainActivity extends ActionBarActivity {
 				// Bitmap bitmap = intent.getParcelableExtra("data");
 				// imageView.setImageBitmap(bitmap);
 				// save(bitmap);
+				imageView.setImageURI(outputFileUri);
 				textView.setText(outputFileUri.getPath());
+				saveToParse();
 				Log.d("debug", "OK");
 
 			} else if (resultCode == RESULT_CANCELED) {
@@ -103,6 +115,52 @@ public class MainActivity extends ActionBarActivity {
 			imageDir.mkdir();
 		}
 		return new File(imageDir, "photo.png");
+	}
+
+	private void saveToParse() {
+
+		File file = getTargetFile();
+		byte[] data = new byte[(int) file.length()];
+
+		try {
+
+			FileInputStream fis = new FileInputStream(file);
+			fis.read(data);
+
+			int offset = 0;
+			int numRead = 0;
+
+			while ((numRead = fis.read(data, offset, data.length - offset)) != -1) {
+
+				offset += numRead;
+
+				fis.close();
+
+			}
+
+		} catch (FileNotFoundException e) {
+
+			e.printStackTrace();
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+
+		}
+
+		final ParseFile parseFile = new ParseFile("photo.png", data);
+
+		parseFile.saveInBackground(new SaveCallback() {
+
+			@Override
+			public void done(ParseException arg0) {
+
+				Log.d("debug", parseFile.getUrl());
+
+			}
+
+		});
+
 	}
 
 	private void save(Bitmap bitmap) {
