@@ -30,6 +30,7 @@ import com.parse.Parse;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.SaveCallback;
 
 @SuppressLint("ValidFragment")
@@ -150,7 +151,11 @@ public class MainActivity extends ActionBarActivity {
 
 		final ParseFile parseFile = new ParseFile("photo.png", data);
 
-		parseFile.saveInBackground(new SaveCallback() {
+		// parseFile.saveInBackground(new SaveCallback() {
+
+		ParseObject object = new ParseObject("photo");
+		object.put("file", parseFile);
+		object.saveInBackground(new SaveCallback() {
 
 			@Override
 			public void done(ParseException arg0) {
