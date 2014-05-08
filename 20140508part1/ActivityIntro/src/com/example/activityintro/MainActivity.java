@@ -1,10 +1,12 @@
 package com.example.activityintro;
 
+import com.example.activityintro.fragment.MyFragment1;
 import com.example.activityintro.fragment.PlaceholderFragment;
 
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 import android.os.Build;
 
 public class MainActivity extends ActionBarActivity {
@@ -72,6 +75,21 @@ public class MainActivity extends ActionBarActivity {
 			break;
 		}
 	}
+	
+	public void replaceFragment(View view) {
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		
+		switch (view.getId()) {
+		case R.id.placeholderFragmentButton:
+			ft.replace(R.id.container, new MyFragment1());
+			break;
+		case R.id.fragment1Button:
+			ft.replace(R.id.container, new PlaceholderFragment());
+			break;
+		}
+		
+		ft.commit();
+	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode,
@@ -84,6 +102,19 @@ public class MainActivity extends ActionBarActivity {
 				"intent (whichButton) = "
 						+ intent.getStringExtra("whichButton"));
 		}
+		
+		switch (requestCode) {
+		case REQUEST_CODE_ACT1:
+			Toast.makeText(this, "Activity1 back", Toast.LENGTH_SHORT).show();
+			break;
+		case REQUEST_CODE_ACT2:
+			Toast.makeText(this, "Activity2 back", Toast.LENGTH_SHORT).show();
+			break;
+		case REQUEST_CODE_ACT3:
+			Toast.makeText(this, "Activity3 back", Toast.LENGTH_SHORT).show();
+			break;
+		}
 	}
+	
 
 }
