@@ -44,6 +44,7 @@ public class MainActivity extends ActionBarActivity {
 		Parse.initialize(this, "Wh1jwNO1YGYmkTGCixCsIZZ3Oj3mZE3tkbeGmaGT", "QeZGogkKr2VdiFxUnufl2tQSoDnrx1qprrSgPyBS");
 		PushService.setDefaultPushCallback(this, MainActivity.class);
 		ParseInstallation.getCurrentInstallation().saveInBackground();
+		PushService.subscribe(this, "all", MainActivity.class);
 	
 	}
 
@@ -94,6 +95,11 @@ public class MainActivity extends ActionBarActivity {
 			}
 			Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
 			editText.setText("");
+			
+			ParsePush push = new ParsePush();
+			push.setChannel("all");
+			push.setMessage(text);
+			push.sendInBackground();
 			
 			Intent intent = new Intent();
 			intent.setClass(getActivity(), MessageActivity.class);
