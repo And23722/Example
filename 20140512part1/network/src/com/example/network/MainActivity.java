@@ -13,11 +13,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
-
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,9 +40,10 @@ public class MainActivity extends ActionBarActivity {
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
 
-		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-				.permitAll().build();
-		StrictMode.setThreadPolicy(policy);
+		// StrictMode.ThreadPolicy policy = new
+		// StrictMode.ThreadPolicy.Builder()
+		// .permitAll().build();
+		// StrictMode.setThreadPolicy(policy);
 	}
 
 	@Override
@@ -88,7 +88,28 @@ public class MainActivity extends ActionBarActivity {
 
 			button.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					fetch(editText.getText().toString());
+					
+					AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>(){
+
+						@Override
+						protected String doInBackground(Void... params) {
+							
+							return fetch(editText.getText().toString());
+							
+						}
+						
+						@Override
+						protected void onPostExecute(String result) {
+							// TODO Auto-generated method stub
+							Toast.makeText(getActivity(), result,
+									Toast.LENGTH_SHORT).show();
+						}
+						
+					};
+					
+					task.execute();
+					
+					
 				}
 			});
 
@@ -114,13 +135,17 @@ public class MainActivity extends ActionBarActivity {
 
 				JSONObject object = new JSONObject(result);
 				JSONArray results = object.getJSONArray("results");
+				String addressResult = "";
+				
 				for (int i = 0; i < results.length(); i++) {
+					
 					String formattedAddress = results.getJSONObject(i)
 							.getString("formatted_address");
-					Toast.makeText(getActivity(), formattedAddress,
-							Toast.LENGTH_SHORT).show();
+					
+					addressResult += formattedAddress + ",";
+					
 				}
-				return result;
+				return addressResult;
 
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
