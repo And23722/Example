@@ -1,5 +1,7 @@
 package com.example.simpleui;
 
+import java.util.List;
+
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -16,18 +18,25 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 import android.os.Build;
+import android.provider.Settings.Secure;
 
+import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseAnalytics;
+import com.parse.ParseException;
 import com.parse.ParseInstallation;
+import com.parse.ParseObject;
 import com.parse.ParsePush;
+import com.parse.ParseQuery;
 import com.parse.PushService;
 
 public class MainActivity extends ActionBarActivity {
@@ -42,10 +51,13 @@ public class MainActivity extends ActionBarActivity {
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
 		
-		Parse.initialize(this, "Wh1jwNO1YGYmkTGCixCsIZZ3Oj3mZE3tkbeGmaGT", "QeZGogkKr2VdiFxUnufl2tQSoDnrx1qprrSgPyBS");
+		Parse.initialize(this, "ZTzbLIoe6Ii7h7Ec7K2GbtgaldLB7Xqci6YWBuOR", "BJhCOzHvfIiWbqGT7npctVLfarCvME7ToFK7WpZO");
 		PushService.setDefaultPushCallback(this, MainActivity.class);
 		ParseInstallation.getCurrentInstallation().saveInBackground();
 		PushService.subscribe(this, "all", MainActivity.class);
+		PushService.subscribe(this, "id_" + getDeviceId(), MainActivity.class);
+		//µù¥U
+		register();
 	
 	}
 
@@ -68,12 +80,19 @@ public class MainActivity extends ActionBarActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	private String getDeviceId() {
+		return Secure.getString(getContentResolver(), Secure.ANDROID_ID);
+	}
+	
+	private void register() {
+		String id = getDeviceId();
+		ParseObject object = new ParseObject("DeviceId");
+		object.put("deviceId", id);
+		object.saveInBackground();
+	}
 
-	// public void send(View view) {
 
-	// Log.d("debug", "click");
-
-	// }
 
 	/**
 	 * A placeholder fragment containing a simple view.
@@ -85,6 +104,7 @@ public class MainActivity extends ActionBarActivity {
 		private CheckBox checkBox;
 		private SharedPreferences sp;
 		private SharedPreferences.Editor editor;
+		private Spinner spinner;
 
 		public PlaceholderFragment() {
 		}
@@ -107,6 +127,24 @@ public class MainActivity extends ActionBarActivity {
 			intent.putExtra("text", text);
 			intent.putExtra("checkBox", checkBox.isChecked());
 			getActivity().startActivity(intent);
+		}
+		
+		private void loadDeviceId() {
+			ParseQuery<ParseObject> query = ParseQuery.getQuery("DeviceId");
+			query.findInBackground(new FindCallback<ParseObject>() {
+				@Override
+				public void done(List<ParseObject> objects, ParseException e) {
+					String[] deviceId = new String[objects.size()];
+					for (int i = 0; i < objects.size(); i++) {
+						deviceId[i] = objects.get(i).getString("deviceId");
+					}
+					ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+							getActivity(),
+							android.R.layout.simple_spinner_item, deviceId);
+					spinner.setAdapter(adapter);
+				}
+
+			});
 		}
 
 		@Override
@@ -170,6 +208,9 @@ public class MainActivity extends ActionBarActivity {
 			
 			editText.setText(sp.getString("text",""));
 			checkBox.setChecked(sp.getBoolean("checkBox",false));
+			
+			spinner = (Spinner) rootView.findViewById(R.id.spinner1);
+			loadDeviceId();
 
 			return rootView;
 		}
