@@ -119,8 +119,10 @@ public class MainActivity extends ActionBarActivity {
 			Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
 			editText.setText("");
 			
+			String deviceId = (String) spinner.getSelectedItem();
+			
 			ParsePush push = new ParsePush();
-			push.setChannel("all");
+			push.setChannel("id_" + deviceId);
 			push.setMessage(text);
 			push.sendInBackground();
 			
@@ -141,11 +143,12 @@ public class MainActivity extends ActionBarActivity {
 					for (int i = 0; i < objects.size(); i++) {
 						set.add(objects.get(i).getString("deviceId"));
 					}
+					String[] deviceId = new String[set.size()];
 
 					ArrayAdapter<String> adapter = new ArrayAdapter<String>(
 							getActivity(),
 							android.R.layout.simple_spinner_item, set
-									.toArray(new String[set.size()]));
+									.toArray(deviceId));
 					spinner.setAdapter(adapter);
 				}
 			});
