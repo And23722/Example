@@ -1,6 +1,8 @@
 package com.example.simpleui;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -134,16 +136,18 @@ public class MainActivity extends ActionBarActivity {
 			query.findInBackground(new FindCallback<ParseObject>() {
 				@Override
 				public void done(List<ParseObject> objects, ParseException e) {
-					String[] deviceId = new String[objects.size()];
+
+					Set<String> set = new HashSet<String>();
 					for (int i = 0; i < objects.size(); i++) {
-						deviceId[i] = objects.get(i).getString("deviceId");
+						set.add(objects.get(i).getString("deviceId"));
 					}
+
 					ArrayAdapter<String> adapter = new ArrayAdapter<String>(
 							getActivity(),
-							android.R.layout.simple_spinner_item, deviceId);
+							android.R.layout.simple_spinner_item, set
+									.toArray(new String[set.size()]));
 					spinner.setAdapter(adapter);
 				}
-
 			});
 		}
 
